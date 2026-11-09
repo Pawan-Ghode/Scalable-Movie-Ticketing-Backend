@@ -33,12 +33,9 @@ public class BookingService {
     public BookingResponse createBooking(BookingRequest request) {
 
         // 1. Validate show
-        Show show = showRepository.findById(request.showId())
-                .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "Show not found"
-                        ));
+       Show show = showRepository.findByIdForUpdate(request.showId())
+        .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Show not found"));
 
         // 2. Reject duplicate seat IDs
         List<Integer> seatIds = request.seatIds();
