@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import java.time.LocalDateTime;
-
+import org.springframework.security.test.context.support.WithMockUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@WithMockUser(username = "test@example.com", roles = {"USER"})
 class BookingIntegrationTest {
 
     @Autowired
@@ -121,6 +122,7 @@ void shouldCreateBookingSuccessfully() throws Exception {
 
     // 1. Send booking request and verify HTTP response
     mockMvc.perform(post("/api/bookings")
+    .with(user("test@example.com").roles("USER"))
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                     {
@@ -155,6 +157,7 @@ void shouldCreateBookingSuccessfully() throws Exception {
     void shouldReturn404WhenShowDoesNotExist() throws Exception {
 
         mockMvc.perform(post("/api/bookings")
+        .with(user("test@example.com").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -174,6 +177,7 @@ void shouldCreateBookingSuccessfully() throws Exception {
     void shouldRejectDuplicateSeatIds() throws Exception {
 
         mockMvc.perform(post("/api/bookings")
+        .with(user("test@example.com").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -193,6 +197,7 @@ void shouldCreateBookingSuccessfully() throws Exception {
     void shouldRejectNonExistingSeat() throws Exception {
 
         mockMvc.perform(post("/api/bookings")
+        .with(user("test@example.com").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -212,6 +217,7 @@ void shouldCreateBookingSuccessfully() throws Exception {
     void shouldRejectSeatFromAnotherScreen() throws Exception {
 
         mockMvc.perform(post("/api/bookings")
+        .with(user("test@example.com").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -232,6 +238,7 @@ void shouldCreateBookingSuccessfully() throws Exception {
 
         // First request should succeed
         mockMvc.perform(post("/api/bookings")
+        .with(user("test@example.com").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -243,6 +250,7 @@ void shouldCreateBookingSuccessfully() throws Exception {
 
         // Second request for the same seat should fail
         mockMvc.perform(post("/api/bookings")
+        .with(user("test@example.com").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -265,6 +273,7 @@ void shouldCreateBookingSuccessfully() throws Exception {
     void shouldRejectEmptySeatList() throws Exception {
 
         mockMvc.perform(post("/api/bookings")
+        .with(user("test@example.com").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -282,6 +291,7 @@ void shouldCreateBookingSuccessfully() throws Exception {
 void shouldRejectMissingShowId() throws Exception {
 
     mockMvc.perform(post("/api/bookings")
+    .with(user("test@example.com").roles("USER"))
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                     {
@@ -298,6 +308,7 @@ void shouldRejectMissingShowId() throws Exception {
 void shouldRejectNullSeatId() throws Exception {
 
     mockMvc.perform(post("/api/bookings")
+    .with(user("test@example.com").roles("USER"))
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                     {
@@ -315,6 +326,7 @@ void shouldRejectNullSeatId() throws Exception {
 void shouldRejectMalformedJson() throws Exception {
 
     mockMvc.perform(post("/api/bookings")
+    .with(user("test@example.com").roles("USER"))
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                     {
