@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -70,9 +71,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext()
                     .setAuthentication(authentication);
             }
-        } catch (JwtException | IllegalArgumentException ex) {
-            SecurityContextHolder.clearContext();
-        }
+        } catch (JwtException | IllegalArgumentException | UsernameNotFoundException exception) {
+    SecurityContextHolder.clearContext();
+}
 
         filterChain.doFilter(request, response);
     }
