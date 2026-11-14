@@ -149,7 +149,6 @@ void shouldCreateBookingSuccessfully() throws Exception {
     assertEquals("CONFIRMED", savedBooking.getStatus());
 }
 
-
     // Test 2: Show does not exist
     @Test
     void shouldReturn404WhenShowDoesNotExist() throws Exception {
