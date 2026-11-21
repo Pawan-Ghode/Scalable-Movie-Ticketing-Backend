@@ -1,4 +1,3 @@
-
 package com.pawan.moviebooking;
 
 import java.util.List;
@@ -37,34 +36,31 @@ public class HelloController {
     }
 
     @GetMapping("/movies")
-    @Operation(summary = "Get all movies", description = "Returns the list of all available movies")
-    @ApiResponse(responseCode = "200", description = "Movies retrieved successfully")
-    public List<MovieResponse> getMovies() {
-        return movieService.getMovies()
-                .stream()
-                .map(movieMapper::toResponse)
-                .toList();
-    }
+@Operation(summary = "Get all movies", description = "Returns the list of all available movies")
+@ApiResponse(responseCode = "200", description = "Movies retrieved successfully")
+public List<MovieResponse> getMovies() {
+    return movieService.getCachedMovies();
+}
 
     @GetMapping("/movies/{id}")
-    @Operation(summary = "Get movie by ID", description = "Returns details of a specific movie")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Movie found"),
-            @ApiResponse(responseCode = "404", description = "Movie not found")
-    })
-    public ResponseEntity<?> getMovieById(
-            @Parameter(description = "ID of the movie")
-            @PathVariable int id) {
+@Operation(summary = "Get movie by ID", description = "Returns details of a specific movie")
+@ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Movie found"),
+        @ApiResponse(responseCode = "404", description = "Movie not found")
+})
+public ResponseEntity<?> getMovieById(
+        @Parameter(description = "ID of the movie")
+        @PathVariable int id) {
 
-        Movie movie = movieService.getMovieById(id);
+    MovieResponse movie = movieService.getCachedMovieById(id);
 
-        if (movie == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiError(404, "Movie not found"));
-        }
-
-        return ResponseEntity.ok(movieMapper.toResponse(movie));
+    if (movie == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiError(404, "Movie not found"));
     }
+
+    return ResponseEntity.ok(movie);
+}
 
     @PostMapping("/movies")
     @Operation(summary = "Add a movie", description = "Creates a new movie")

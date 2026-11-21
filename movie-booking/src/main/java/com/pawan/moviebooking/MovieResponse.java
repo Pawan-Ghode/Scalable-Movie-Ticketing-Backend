@@ -1,5 +1,7 @@
 package com.pawan.moviebooking;
 
+import java.io.Serializable;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Movie details returned by the API")
@@ -14,4 +16,7 @@ public record MovieResponse(
         @Schema(description = "Movie ticket price", example = "250")
         int price
 
-) {}
+) implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+}
