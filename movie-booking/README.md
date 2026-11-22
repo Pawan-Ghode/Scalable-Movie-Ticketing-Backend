@@ -654,6 +654,52 @@ http://localhost:8080
 
 ### 6. Open Swagger UI
 
+## Docker Setup
+
+The application includes Docker configuration for running the Spring Boot application, PostgreSQL, and Redis using Docker Compose.
+
+### Prerequisites
+
+- Docker Desktop with Docker Compose.
+
+### 1. Configure environment variables
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+Update `.env` with your local PostgreSQL password and a secure JWT secret.
+
+### 2. Build and start services
+
+```bash
+docker compose up --build
+```
+
+This starts:
+
+- Spring Boot application on port 8080.
+- PostgreSQL on port 5432.
+- Redis on port 6379.
+
+PostgreSQL and Redis health checks must pass before the application starts.
+
+### 3. Stop services
+
+```bash
+docker compose down
+```
+
+To remove the PostgreSQL data volume as well:
+
+```bash
+docker compose down -v
+```
+
+**Note:** Docker runtime execution has not yet been verified.
+
 
 
 ```text
@@ -665,7 +711,6 @@ http://localhost:8080/swagger-ui/index.html
 
 
 Use Swagger or Postman to explore and test the APIs.
-
 
 
 ## Running Tests
@@ -820,11 +865,11 @@ The following capabilities are not implemented in the current version and are po
 
 
 
-- Redis caching for frequently accessed movie and show data.
+- Runtime verification of Redis caching.
+
+- Docker image build and container runtime verification.
 
 - Apache Kafka for asynchronous booking events and notifications.
-
-- Docker containerization.
 
 - Microservices architecture.
 
